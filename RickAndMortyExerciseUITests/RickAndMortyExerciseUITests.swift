@@ -40,4 +40,43 @@ final class RickAndMortyExerciseUITests: XCTestCase {
             }
         }
     }
+    
+    func testVoiceOverAccessibility() throws {
+        let searchBar = app.textFields["searchField"]
+        XCTAssertTrue(searchBar.exists, "Search bar should exist")
+        XCTAssertEqual(searchBar.label, "Search Characters", "Search bar accessibility label should be correct")
+        
+        let clearFiltersButton = app.buttons["clearFiltersButton"]
+        XCTAssertTrue(clearFiltersButton.exists, "Clear Filters button should exist")
+        XCTAssertEqual(clearFiltersButton.label, "Clear Filters", "Clear Filters button accessibility label should be correct")
+        
+        XCUIDevice.shared.orientation = .portrait
+        
+        searchBar.tap()
+        searchBar.typeText("Rick Sanchez")
+        app.keyboards.buttons["Return"].tap()
+        
+        let characterCell = app.staticTexts["CharacterName_Rick Sanchez_Cell_Number_1"]
+        app.swipeUp()
+        XCTAssertTrue(characterCell.waitForExistence(timeout: 10), "Rick Sanchez should appear in the search results")
+        XCTAssertTrue(characterCell.exists, "Character cell for Rick Sanchez should exist")
+        XCTAssertEqual(characterCell.label, "Rick Sanchez", "Character cell accessibility label should be correct")
+
+    }
+
+
+      func testDynamicTextSupport() throws {
+          app.launchArguments.append("-UIPreferredContentSizeCategoryName")
+          app.launchArguments.append("UICTContentSizeCategoryXXXL")
+          app.launch()
+
+          let title = app.staticTexts["Rick and Morty Search"]
+          XCTAssertTrue(title.exists, "App title should be visible with large text settings")
+
+          let searchBar = app.textFields["searchField"]
+          XCTAssertTrue(searchBar.exists, "Search bar should be visible with large text settings")
+
+          let clearFiltersButton = app.buttons["clearFiltersButton"]
+          XCTAssertTrue(clearFiltersButton.exists, "Clear Filters button should be visible with large text settings")
+      }
 }

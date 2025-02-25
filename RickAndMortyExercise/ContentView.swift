@@ -48,8 +48,11 @@ struct ContentView: View {
                                 .accessibilityLabel(Text("Image of \(character.name)"))
                                 VStack(alignment: .leading) {
                                     Text("\(character.name)")
-                                        .accessibilityIdentifier("Character name: Rick Sanchez")
+                                        .accessibilityIdentifier("CharacterName_\(character.name)_Cell_Number_\(character.id)")
                                     Text(character.species).font(.subheadline)
+                                        .onAppear(){
+                                            print("CharacterName_\(character.name)_Cell_Number_\(character.id)")
+                                        }
                                 }
                             }
                         }
